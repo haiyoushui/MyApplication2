@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="@color/colorPrimaryDark"
+	android:orientation="vertical">
+	<include layout="@layout/app_bar_back"
+        android:visibility="gone"></include>
+<RelativeLayout
+
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<SurfaceView
+	    android:id="@+id/sfv_preview"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"/>
+
+	<SurfaceView
+	    android:id="@+id/sfv_face"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"/>
+
+		<View
+			android:id="@+id/previewView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+		<ImageView
+			android:id="@+id/scanHorizontalLineImageView"
+			android:layout_width="match_parent"
+			android:layout_height="2dp"
+            android:background="@color/yellow2"/>
+		<ImageView
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:background="@drawable/vedio_saomiao"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true" />
+		<ImageView
+			android:id="@+id/scanVerticalLineImageView"
+			android:layout_width="match_parent"
+			android:layout_height="2dp"
+			android:background="@color/yellow2"/>
+
+</RelativeLayout>
+
+
+</LinearLayout>

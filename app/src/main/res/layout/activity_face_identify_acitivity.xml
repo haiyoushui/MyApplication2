@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+    <include layout="@layout/app_bar_back"></include>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:background="@color/faceiden_1"
+    android:layout_weight="4">
+<ImageView
+    android:id="@+id/face_image"
+    android:layout_margin="@dimen/list_vertical_margin2"
+    android:layout_centerInParent="true"
+    android:background="@drawable/no_photo2"
+    style="@style/faceidentify" />
+    <TextView
+        android:id="@+id/faceidentify_name"
+        style="@style/faceidentify"
+  android:layout_weight="1.12"
+        android:background="@color/faceiden_2"
+        android:text="姓名"/>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+        <TextView
+            android:id="@+id/faceidentify_id"
+            style="@style/faceidentify"
+            android:background="@color/faceiden_3"
+            android:text="证号"/>
+        <TextView
+            android:id="@+id/faceidentify_info"
+            style="@style/faceidentify"
+            android:background="@color/faceiden_4"
+            android:text="信息"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+        <TextView
+            android:id="@+id/faceidentify_sex"
+            style="@style/faceidentify"
+            android:background="@color/faceiden_5"
+            android:text="性别"/>
+        <TextView
+            android:id="@+id/faceidentify_remark"
+            style="@style/faceidentify"
+            android:background="@color/faceiden_6"
+            android:text="其他信息"/>
+    </LinearLayout>
+
+</LinearLayout>

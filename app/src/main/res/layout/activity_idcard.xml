@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar_back"
+        android:id="@+id/include"></include>
+    <RelativeLayout
+        android:id="@+id/login_div"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dip"
+        android:layout_margin="15dip"
+        android:background="@drawable/idcard_input_bg" >
+        <!-- 账号 -->
+        <TextView
+            android:id="@+id/login_user_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:text="Account"
+            />
+
+        <EditText
+            android:id="@+id/iccard_name"
+            android:layout_width="fill_parent"
+            android:layout_height="42dip"
+            android:layout_below="@id/login_user_input"
+            android:drawableLeft="@drawable/idcard_user"
+            android:background="@drawable/input_box"
+            android:hint="姓名"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <!-- 密码 text -->
+        <TextView
+            android:id="@+id/login_password_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iccard_name"
+            android:layout_marginTop="3dp"
+            android:text="Password"
+            />
+        <EditText
+            android:id="@+id/idcard_id"
+            android:layout_width="fill_parent"
+            android:layout_height="42dip"
+            android:background="@drawable/input_box"
+            android:layout_below="@id/login_password_input"
+            android:drawableLeft="@drawable/idcard_id"
+            android:password="true"
+            android:singleLine="true"
+            android:hint="身份证号"
+            android:inputType="textPassword" />
+
+        <!-- 登录button -->
+        <Button
+            android:id="@+id/signin_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/idcard_id"
+            android:layout_alignRight="@id/idcard_id"
+            android:text="身份审核"
+            android:textSize="20dip"
+            android:textColor="@color/white"
+            android:background="@drawable/idcard_selector_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_weight="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/idcard_faceimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_vertical_margin1"
+            android:layout_marginLeft="@dimen/list_vertical_margin3"
+            android:layout_marginRight="@dimen/list_vertical_margin3"
+            android:background="@drawable/no_photo2" />
+    </RelativeLayout>
+    <com.dk.view.patheffect.PathTextView
+        android:id="@+id/path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

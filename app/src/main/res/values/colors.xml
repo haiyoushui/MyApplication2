@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black_button">#666666</color>
+    <color name="item_split">#e7e7e7</color>
+
+
+
+
+    <color name="colorPrimary">#0175e1</color>
+    <color name="colorPrimaryDark">#0094eb</color>
+    <color name="title_background">@color/colorPrimary</color>
+    <color name="main_textcolor">@color/white</color>
+    <color name="title_textcolor">@color/white</color>
+    <color name="grey_800">#424242</color>
+    <color name="main_yellow">#e9f9d004</color>
+    <color name="button_yellow">#ad7d14</color>
+    <color name="sc_transparent_background">#00111111</color>
+    <!--item分割线-->
+    <color name="dialog_poi_search_bg">#f0ffffff</color>
+    <color name="drawable_location_bg">#70ffffff</color>
+    <color name="title_main_radio_bg">#8fc7ff</color>
+    <color name="nav_img_bg">#60acf6</color>
+    <color name="ui_bg">@color/grey_200</color>
+    <color name="parkorder_veh">@color/green</color>
+    <color name="news_first_text_bg">#90000000</color>
+    <color name="forgetpsw_text_col">#b1b1b1</color>
+    <color name="text_color">@color/white</color>
+    <color name="text_color_light">@color/black_button</color>
+    <color name="text_note_color">#a1a1a1</color>
+    <color name="divider_color">@color/grey_300</color>
+    <color name="main_menu_coupon">#afa5fc</color>
+    <color name="faceiden_1">#ff4264</color>
+    <color name="faceiden_2">#fc9d99</color>
+    <color name="faceiden_3">#facdae</color>
+    <color name="faceiden_4">#c9c8aa</color>
+    <color name="faceiden_5">#84af9c</color>
+    <color name="faceiden_6">#2f2035</color>
+
+</resources>

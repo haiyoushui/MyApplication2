@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1.3">
+    <include layout="@layout/app_bar_back"></include>
+</RelativeLayout>
+
+    <LinearLayout
+        android:layout_weight="7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/item_padding"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/include"
+        android:background="@drawable/idcard_input_bg"
+        android:weightSum="1">
+        <LinearLayout
+            style="@style/main_linear">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/faceadd_uid"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/faceadd_edit">
+                <EditText
+                    style="@style/text_info_main"
+                    android:id="@+id/edit_faceadd_uid"
+                    android:hint="@string/title_facedadd_uid"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/main_linear">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/faceadd_uname"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/faceadd_edit">
+                <EditText
+                    style="@style/text_info_main"
+                    android:id="@+id/edit_faceadd_name"
+                    android:hint="@string/title_facedadd_uname"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/main_linear">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/faceadd_uinfo"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/faceadd_edit">
+                <EditText
+                    style="@style/text_info_main"
+                    android:id="@+id/edit_facedadd_uinfo"
+                    android:hint="@string/title_facedadd_uinfo"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/main_linear">
+            <RadioGroup
+                android:layout_marginTop="@dimen/list_vertical_padding"
+                android:id="@+id/radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/faceidentify_male"
+                    style="@style/radioButon"
+                    android:checked="true"
+                    android:text="男" />
+                <RadioButton
+                    android:id="@+id/faceidentify_female"
+                    style="@style/radioButon"
+                    android:text="女" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        style="@style/split_hori"></ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="6">
+
+        <ImageView
+            android:id="@+id/faceadd_faceimage0"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_vertical_margin1"
+
+            android:src="@drawable/no_photo2" />
+        <ImageView
+            android:id="@+id/faceadd_faceimage1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_vertical_margin1"
+
+            android:src="@drawable/no_photo2" />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/faceadd_faceimage2"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_vertical_margin1"
+            android:src="@drawable/no_photo2" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_weight="1.5">
+        <include layout="@layout/app_faceadd_addreplace"></include>
+    </LinearLayout>
+
+</LinearLayout>

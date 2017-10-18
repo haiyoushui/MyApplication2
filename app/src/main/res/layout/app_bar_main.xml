@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height"
+    android:background="@drawable/title_bg">
+
+
+    <ImageButton
+        android:id="@+id/edit"
+        android:layout_width="@dimen/title_ic_width"
+        android:layout_height="@dimen/title_ic_width"
+        android:background="@null"
+        android:src="@drawable/ic_bar_setting"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/stationView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/title_textcolor"
+        android:textSize="@dimen/text_toolbar_size"
+        android:text="@string/main_titletext"/>
+
+
+</RelativeLayout>

@@ -2,8 +2,6 @@ package com.isss.liuh.myapplication.UTILS;
 
 
 
-import android.hardware.camera2.params.Face;
-
 import com.eagle.androidlib.utils.AppUtil;
 import com.eagle.androidlib.utils.DateUtil;
 import com.eagle.androidlib.utils.Logger;
@@ -13,8 +11,6 @@ import com.isss.liuh.myapplication.VO.FacePepleInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 /**
  * Created by LiuH on 2017/10/13.
@@ -150,6 +146,7 @@ public class JsonUtil {
         try{
             jsonObject.put("uname",uname);
             jsonObject.put("sex",sex);
+//            jsonObject.put("birthday".)
             jsonObject.put("uinfo",uinfo);
             jsonObject.put("time", DateUtil.getCurrentDateStrYYYYMMDDHHMMSS());
             jsonObject.put("IMEI", AppUtil.getIMEI(FaceRApplacation.getContext()));
@@ -157,6 +154,27 @@ public class JsonUtil {
             e.printStackTrace();
         }
     return jsonObject;
+    }
+    /**
+     * 将注册的人脸信息封装成JSON
+     */
+    public static JSONObject faceIngo2Json(FacePepleInfo facePepleInfo){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("uname",facePepleInfo.getUname());
+            jsonObject.put("sex",facePepleInfo.getUname());
+            jsonObject.put("birthday",facePepleInfo.getBirthday());
+            jsonObject.put("uinfo",facePepleInfo.getUinfo());
+            jsonObject.put("address",facePepleInfo.getAddress());
+            jsonObject.put("idcardaddress",facePepleInfo.getIDCardAddress());
+            jsonObject.put("ethnic",facePepleInfo.getEthnic());
+            jsonObject.put("idcardid",facePepleInfo.getIDCardId());
+            jsonObject.put("time", DateUtil.getCurrentDateStrYYYYMMDDHHMMSS());
+            jsonObject.put("IMEI", AppUtil.getIMEI(FaceRApplacation.getContext()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
     /**
      * 将人脸识别的返回结果解析
@@ -172,9 +190,14 @@ public class JsonUtil {
           JSONObject jsonUserInfo = new JSONObject(jsonResult.getString("user_info"));
           facePepleInfo.setUname(jsonUserInfo.getString("uname"));
           facePepleInfo.setUinfo(jsonUserInfo.getString("uinfo"));
+          facePepleInfo.setAddress(jsonUserInfo.getString("address"));
+          facePepleInfo.setIDCardAddress(jsonUserInfo.getString("idcardaddress"));
+          facePepleInfo.setIDCardId(jsonUserInfo.getString("idcardid"));
+          facePepleInfo.setBirthday(jsonUserInfo.getString("birthday"));
+          facePepleInfo.setEthnic(jsonUserInfo.getString("ethnic"));
           facePepleInfo.setTime(jsonUserInfo.getString("time"));
           facePepleInfo.setIMEI(jsonUserInfo.getString("IMEI"));
-          facePepleInfo.setSex(jsonUserInfo.getString("sex"));
+          facePepleInfo.setGender(jsonUserInfo.getString("sex"));
           facePepleInfo.setFaceliveness(jsonObject.getJSONArray("ext_info").getJSONObject(0).getString("faceliveness"));
       }catch (Exception e){
           e.printStackTrace();

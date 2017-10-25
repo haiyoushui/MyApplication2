@@ -19,6 +19,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PreviewCallback;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -128,6 +129,17 @@ public class VideoDemo extends Activity {
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width,
 								   int height) {
+			//实现自动对焦
+			mCamera.autoFocus(new Camera.AutoFocusCallback() {
+				@Override
+				public void onAutoFocus(boolean success, Camera camera) {
+					if(success){
+						initCamera();//实现相机的参数初始化
+						camera.cancelAutoFocus();//只有加上了这一句，才会自动对焦。
+					}
+				}
+
+			});
 			mScaleMatrix.setScale(width/(float)PREVIEW_HEIGHT, height/(float)PREVIEW_WIDTH);
 		}
 	};
@@ -240,11 +252,7 @@ public class VideoDemo extends Activity {
 			return;
 		}
 
-		Parameters params = mCamera.getParameters();
-		params.setPreviewFormat(ImageFormat.NV21);
-		params.setPreviewSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
-		mCamera.setParameters(params);
-
+		initCamera();
 		// 设置显示的偏转角度，大部分机器是顺时针90度，某些机器需要按情况设置
 		mCamera.setDisplayOrientation(90);
 		mCamera.setPreviewCallback(new PreviewCallback() {
@@ -272,7 +280,18 @@ public class VideoDemo extends Activity {
 			showTip( "创建对象失败，请确认 libmsc.so 放置正确，\n 且有调用 createUtility 进行初始化" );
 		}
 	}
+	private Camera.Parameters params;
+	//相机参数的初始化设置
+	private void initCamera()
+	{
+		params = mCamera.getParameters();
+		params.setPreviewFormat(ImageFormat.NV21);
+		params.setPreviewSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+		params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);//1连续对焦
+		mCamera.setParameters(params);
+		mCamera.cancelAutoFocus();// 2如果要实现连续的自动对焦，这一句必须加上
 
+	}
 	private void closeCamera() {
 		if (null != mCamera) {
 			mCamera.setPreviewCallback(null);
@@ -349,7 +368,7 @@ public class VideoDemo extends Activity {
 							}
 						}
 
-						Log.d(TAG, "result:"+result+"###"+buffer.length);
+
 					}catch (Exception w){
 						w.printStackTrace();
 					}

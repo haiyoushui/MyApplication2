@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 
+import com.eagle.androidlib.utils.AppUtil;
 import com.eagle.androidlib.utils.DateUtil;
 import com.eagle.androidlib.utils.Logger;
 import com.eagle.androidlib.utils.SystemUtil;
+import com.isss.liuh.myapplication.FaceRApplacation;
 import com.isss.liuh.myapplication.util.FaceUtil;
 
 import java.io.Externalizable;
@@ -23,7 +25,7 @@ import static android.content.ContentValues.TAG;
 
 public class SaveFileToSD {
     public static String savPicRegPic( Camera.Size  cameras, byte[] data,String filePath){
-        String fileName = DateUtil.getCurrentDateStrYYYYMMDDHHMMSS()+".jpg";
+        String fileName = AppUtil.getIMEI(FaceRApplacation.getContext())+"_"+DateUtil.getCurrentDateStrYYYYMMDDHHMMSS()+".jpeg";
         savePicToSDCard(cameras,data, filePath,fileName );
         return filePath+fileName;
     }

@@ -13,7 +13,7 @@
 </RelativeLayout>
 
     <LinearLayout
-        android:layout_weight="7"
+        android:layout_weight="9"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/item_padding"
@@ -75,6 +75,25 @@
                     style="@style/text_info_main"
                     android:id="@+id/edit_facedadd_uinfo"
                     android:hint="@string/title_facedadd_uinfo"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/main_linear">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/faceadd_address"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/faceadd_edit">
+                <EditText
+                    style="@style/text_info_main"
+                    android:id="@+id/edit_facedadd_address"
+                    android:hint="@string/title_facedadd_address"
                     />
             </LinearLayout>
         </LinearLayout>

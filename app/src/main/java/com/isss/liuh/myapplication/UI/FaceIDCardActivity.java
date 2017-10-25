@@ -1,6 +1,5 @@
 package com.isss.liuh.myapplication.UI;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,8 +8,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,8 +26,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.OnResultListener;
+import com.baidu.ocr.sdk.exception.OCRError;
+import com.baidu.ocr.sdk.model.AccessToken;
+import com.baidu.ocr.sdk.model.IDCardParams;
+import com.baidu.ocr.sdk.model.IDCardResult;
 import com.dk.view.patheffect.PathTextView;
 import com.eagle.androidlib.baseUI.BaseActivity;
 import com.eagle.androidlib.utils.Logger;
@@ -41,11 +47,12 @@ import com.isss.liuh.myapplication.NET.HeadUtil;
 import com.isss.liuh.myapplication.R;
 import com.isss.liuh.myapplication.Share.SystemShare;
 import com.isss.liuh.myapplication.UTILS.JsonUtil;
-import com.isss.liuh.myapplication.UTILS.PicUtil;
 import com.isss.liuh.myapplication.VO.FacePepleInfo;
 import com.isss.liuh.myapplication.VideoDemo;
 import com.isss.liuh.myapplication.util.FaceUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -56,38 +63,51 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.attr.duration;
-import static android.R.attr.radius;
-import static android.R.attr.shadowColor;
 
-
-public class IDCardActivity extends BaseActivity {
-    private final String TAG = "IDCardActivity";
+public class FaceIDCardActivity extends BaseActivity {
     private final int IDCARD = 10001;
+    private final int ADDFACE = 10002;
+    private final int IDCARDSEARCH = 10003;
+    private final String TAG = "FaceIDCardActivity";
     @BindView(R.id.title_back)
     ImageButton titleBack;
     @BindView(R.id.stationView)
     TextView stationView;
-
+    @BindView(R.id.login_user_input)
+    TextView loginUserInput;
+    @BindView(R.id.iccard_name)
+    EditText iccardName;
+    @BindView(R.id.login_password_input)
+    TextView loginPasswordInput;
+    @BindView(R.id.idcard_id)
+    EditText idcardId;
     @BindView(R.id.signin_button)
     Button signinButton;
     @BindView(R.id.idcard_faceimage)
     ImageView idcardFaceimage;
-    @BindView(R.id.iccard_name)
-    EditText iccardName;
-    @BindView(R.id.idcard_id)
-    EditText idcardId;
+    @BindView(R.id.path)
+    PathTextView path;
+    @BindView(R.id.idcard_address)
+    EditText idcardAddress;
+    @BindView(R.id.faceidentify_male)
+    RadioButton faceidentifyMale;
+    @BindView(R.id.faceidentify_female)
+    RadioButton faceidentifyFemale;
+    @BindView(R.id.radiogroup)
+    RadioGroup radiogroup;
+
 
     private String fileSrc;
     private Bitmap mImage = null;
+    private FacePepleInfo facePepleInfo = new FacePepleInfo();
 
     private Activity getContext() {
-        return IDCardActivity.this;
+        return FaceIDCardActivity.this;
     }
 
     @Override
     public int getLayoutID() {
-        return R.layout.activity_idcard;
+        return R.layout.activity_face_idcard;
     }
 
     @Override
@@ -115,13 +135,13 @@ public class IDCardActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        setText();
-        ToastManager.getInstance(getContext()).show("本功能暂未启动！");
+        stationView.setText(getResources().getString(R.string.title_faceidcard));
+        initAccessTokenWithAkSk();
+        radioButtonCheak();
     }
 
-    @OnClick({R.id.title_back, R.id.idcard_faceimage,R.id.signin_button})
+    @OnClick({R.id.title_back, R.id.idcard_faceimage, R.id.signin_button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
@@ -131,30 +151,40 @@ public class IDCardActivity extends BaseActivity {
                 showDdialo();
                 break;
             case R.id.signin_button:
-                ToastManager.getInstance(getContext()).show("本功能暂未启动！");
-               String uid =  idcardId.getText().toString();
-                String uname = iccardName.getText().toString();
-                if(uid==null||"".equals(uid)||uname==null||"".equals(uname)){
-                    ToastManager.getInstance(getContext()).show("请填写身份证号和姓名");
-                    FaceIdentifyHttp(fileSrc,HeadUtil.verification(fileSrc, uid,uname));
+                if("".equals(idcardId.getText().toString()) || "".equals(iccardName.getText().toString())){
+                    ToastManager.getInstance(getContext()).show("填写完整信息！");
+                }else if(idcardId.getText().toString() == facePepleInfo.getUid() || idcardId.getText().toString().equals(facePepleInfo.getUid()) ){
+                    facePepleInfo.setUname(iccardName.getText().toString());
+                    facePepleInfo.setAddress(idcardAddress.getText().toString());
+                    addFaceHttp(fileSrc, false);
+                }else {
+                    ToastManager.getInstance(getContext()).show("正在重新查询信息！");
+                    //身份证号查询信息
+                    IDCardIdSearch();
                 }
 
                 break;
         }
     }
 
-    private void setText() {
-        PathTextView mPathTextView = (PathTextView) findViewById(R.id.path);
-        mPathTextView.setPaintType(PathTextView.Type.MULTIPLY);
-        mPathTextView.setTextColor(R.color.white);
-        mPathTextView.setTextSize(18);
-        mPathTextView.setTextWeight(3);
-        mPathTextView.setDuration(duration);
-        mPathTextView.setShadow(radius, 4, 4, shadowColor);
-        mPathTextView.init("Hello World");
-        mPathTextView.isShown();
-    }
+    public void radioButtonCheak() {
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.faceidentify_female:
+                        facePepleInfo.setGender("女");
+                        break;
+                    case R.id.faceidentify_male:
+                        facePepleInfo.setGender("男");
+                        break;
 
+                }
+            }
+        });
+
+
+    }
 
     public void showDdialo() {
         final Dialog dialogPic = new Dialog(getContext(), R.style.dialog);
@@ -260,9 +290,10 @@ public class IDCardActivity extends BaseActivity {
      *
      * @param fileSrc
      */
-    private void FaceIdentifyHttp(String fileSrc, RequestParams params) {
+    private void addFaceHttp(String fileSrc, boolean isReplace) {
 
-
+        String userInfo = JsonUtil.faceIngo2Json(facePepleInfo).toString();
+        RequestParams params = HeadUtil.addFace(fileSrc, idcardId.getText().toString(), userInfo, isReplace);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onCancelled(CancelledException arg0) {
@@ -270,8 +301,8 @@ public class IDCardActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable arg0, boolean arg1) {
-              //  ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸识别失败！");
-                Logger.e(arg0.toString());
+                ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸注册失败！");
+
             }
 
             @Override
@@ -280,13 +311,87 @@ public class IDCardActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String result) {
-                Logger.i(TAG, "人脸识别结果" + result);
+                Logger.i(TAG, "添加人脸返回结果" + result);
                 Message msg = new Message();
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 msg.setData(bundle);
-                msg.what = IDCARD;
+                msg.what = ADDFACE;
                 handler.sendMessage(msg);
+
+            }
+        });
+
+    }
+
+    private void initAccessTokenWithAkSk() {
+        AccessToken accessToken = new AccessToken();
+        accessToken.setAccessToken(SystemShare.getBAIDUTOKEN(getContext()));
+        accessToken.setExpiresIn(SystemShare.getBAIDUEXPIRESIN(getContext()));
+//        accessToken.setLic();
+        OCR.getInstance().initWithToken(getApplicationContext(), accessToken);
+    }
+
+    private void recIDCard(String idCardSide, String filePath) {
+        IDCardParams param = new IDCardParams();
+        param.setImageFile(new File(filePath));
+        // 设置身份证正反面
+        param.setIdCardSide(idCardSide);
+        // 设置方向检测
+        param.setDetectDirection(true);
+        // 设置图像参数压缩质量0-100, 越大图像质量越好但是请求时间越长。 不设置则默认值为20
+        param.setImageQuality(100);
+        OCR.getInstance().recognizeIDCard(param, new OnResultListener<IDCardResult>() {
+            @Override
+            public void onResult(IDCardResult result) {
+                if (result != null && result.getDirection() > 0) {
+                    Logger.i(TAG,"身份证号查询"+result.toString());
+                    if(result.getIdNumber() != null)facePepleInfo.setIDCardId(result.getIdNumber().toString());
+                    if(result.getIdNumber() != null)facePepleInfo.setUid(result.getIdNumber().toString());
+                    if(result.getEthnic() != null)facePepleInfo.setEthnic(result.getEthnic().toString());
+                    if(result.getGender() != null)facePepleInfo.setGender(result.getGender().toString());
+                    if(result.getAddress() != null)facePepleInfo.setAddress(result.getAddress().toString());
+                    if(result.getName() != null)facePepleInfo.setUname(result.getName().toString());
+                    handler.sendEmptyMessage(IDCARD);
+
+                }
+            }
+
+            @Override
+            public void onError(OCRError error) {
+                error.printStackTrace();
+                Logger.e(TAG, ""+error.toString());
+                ToastManager.getInstance(getContext()).show("自动识别失败！");
+            }
+        });
+    }
+    private void IDCardIdSearch() {
+        RequestParams params = HeadUtil.IDCardIdSearch(idcardId.getText().toString());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+            }
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+            }
+            @Override
+            public void onFinished() {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Logger.i(TAG, "身份证号查询结果" + result);
+                try{
+                    JSONObject jsonObject = new JSONObject(result);
+                    facePepleInfo.setIDCardAddress(jsonObject.getString("address"));
+                    facePepleInfo.setBirthday(jsonObject.getString("birthday"));
+                    facePepleInfo.setGender(jsonObject.getString("gender"));
+                    facePepleInfo.setIDCardId(jsonObject.getString("IDCardId"));
+                    facePepleInfo.setUid(jsonObject.getString("IDCardId"));
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                handler.sendEmptyMessage(IDCARDSEARCH);
 
             }
         });
@@ -296,16 +401,26 @@ public class IDCardActivity extends BaseActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == IDCARD) {
-                FacePepleInfo facePepleInfo = JsonUtil.faceInfo2FacePeple(msg.getData().getString("result"));
-                if (facePepleInfo.getScores() > 70) {
-                        idcardId.setText(facePepleInfo.getUid());
-                        iccardName.setText(facePepleInfo.getUname());
-                    FaceIdentifyHttp(fileSrc,HeadUtil.verification(fileSrc, facePepleInfo.getUid(),facePepleInfo.getUname()));
-                }else {
+            if (msg.what == ADDFACE) {
+                ToastManager.getInstance(getContext()).show("操作成功！");
 
+            } else if (msg.what == IDCARD || msg.what == IDCARDSEARCH) {
+                //身份证扫描结果显示
+                idcardId.setText(facePepleInfo.getIDCardId());
+                iccardName.setText(facePepleInfo.getUname());
+                if(facePepleInfo.getIDCardAddress() == null||"".equals(facePepleInfo.getIDCardAddress())){
+                    idcardAddress.setText(facePepleInfo.getAddress());
+                }else{
+                    idcardAddress.setText(facePepleInfo.getIDCardAddress());
                 }
 
+                if(facePepleInfo.getGender() == "男" || "男".equals(facePepleInfo.getGender())){
+                    faceidentifyMale.setChecked(true);
+                }else if (facePepleInfo.getGender() == "女" || "女".equals(facePepleInfo.getGender())){
+                    faceidentifyFemale.setChecked(true);
+                }
+            }else if(msg.what == IDCARDSEARCH) {
+                ToastManager.getInstance(getContext()).show("查询成功！");
             }
             super.handleMessage(msg);
         }
@@ -317,7 +432,7 @@ public class IDCardActivity extends BaseActivity {
         options.inPurgeable = true;
         options.inSampleSize = 1;
         idcardFaceimage.setImageBitmap(BitmapFactory.decodeFile(fileSrc, options));
-        FaceIdentifyHttp(fileSrc,HeadUtil.identifyFace(fileSrc, "1"));
+        recIDCard(IDCardParams.ID_CARD_SIDE_FRONT, fileSrc);
     }
 
     /**
@@ -345,4 +460,5 @@ public class IDCardActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

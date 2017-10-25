@@ -24,7 +24,7 @@
     <application
         android:name=".FaceRApplacation"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/applogo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
@@ -78,10 +78,10 @@
             android:label="@string/title_activity_face_identify_acitivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.IDCardActivity"
+            android:name=".UI.IDCheakActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UTILS.FaceGNActivity"
+            android:name=".UI.FaceIDCardActivity"
             android:label="@string/title_activity_face_gn"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -42,9 +42,12 @@ import com.isss.liuh.myapplication.R;
 import com.isss.liuh.myapplication.Share.SystemShare;
 import com.isss.liuh.myapplication.UTILS.JsonUtil;
 import com.isss.liuh.myapplication.UTILS.PicUtil;
+import com.isss.liuh.myapplication.VO.FacePepleInfo;
 import com.isss.liuh.myapplication.VideoDemo;
 import com.isss.liuh.myapplication.util.FaceUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -57,9 +60,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class FaceAddActivity extends BaseActivity implements View.OnLongClickListener{
+public class FaceAddActivity extends BaseActivity implements View.OnLongClickListener {
     private final String TAG = "FaceAddActivity";
     private final int ADDSUCCESSFUL = 10001;
+    private final int IDCARDSEARCH = 10002;
     @BindView(R.id.title_back)
     ImageButton titleBack;
     @BindView(R.id.stationView)
@@ -88,12 +92,14 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
     ImageView faceaddFaceimage1;
     @BindView(R.id.faceadd_faceimage2)
     ImageView faceaddFaceimage2;
-
+    @BindView(R.id.edit_facedadd_address)
+    EditText editFacedaddAddress;
+    private FacePepleInfo facePepleInfo = new FacePepleInfo();
     private Bitmap mImage = null;
     private String fileSrc = null;
-    private String sex = "男";
     private int ImageFlag = 0;
-    private HashMap<Integer,String> filePathMap = new HashMap<>();
+    private HashMap<Integer, String> filePathMap = new HashMap<>();
+
     @Override
     public int getLayoutID() {
         return R.layout.activity_face_add;
@@ -130,10 +136,27 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
         radioButtonCheak();
-        stationView.setText("人脸添加");
+        stationView.setText(getResources().getString(R.string.main_titletext));
         faceaddFaceimage0.setOnLongClickListener(this);
         faceaddFaceimage1.setOnLongClickListener(this);
         faceaddFaceimage2.setOnLongClickListener(this);
+        editFaceaddName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (editFaceaddUid.getText().toString() == null || "".equals(editFaceaddUid.getText().toString())) {
+                        editFaceaddUid.setFocusable(true);
+                        editFaceaddUid.setFocusableInTouchMode(true);
+                        editFaceaddUid.requestFocus();
+                        ToastManager.getInstance(FaceAddActivity.this).show("请先填写身份证号");
+                    } else {
+                        IDCardIdSearch();
+                    }
+
+                } else {
+                }
+            }
+        });
     }
 
     public void radioButtonCheak() {
@@ -142,18 +165,15 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.faceidentify_female:
-                        sex = "女";
+                        facePepleInfo.setGender("女");
                         break;
                     case R.id.faceidentify_male:
-                        sex = "男";
+                        facePepleInfo.setGender("男");
                         break;
 
                 }
-
             }
         });
-
-
     }
 
 
@@ -264,15 +284,15 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         options.inPurgeable = true;
         options.inSampleSize = 1;
         mImage = PicUtil.getRoundedCornerBitmap(BitmapFactory.decodeFile(fileSrc, options), 300, 400);
-        if(ImageFlag == 0){
+        if (ImageFlag == 0) {
             faceaddFaceimage0.setImageBitmap(mImage);
-            filePathMap.put(0,fileSrc);
-        }else if(ImageFlag == 1){
+            filePathMap.put(0, fileSrc);
+        } else if (ImageFlag == 1) {
             faceaddFaceimage1.setImageBitmap(mImage);
-            filePathMap.put(1,fileSrc);
-        }else{
+            filePathMap.put(1, fileSrc);
+        } else {
             faceaddFaceimage2.setImageBitmap(mImage);
-            filePathMap.put(2,fileSrc);
+            filePathMap.put(2, fileSrc);
         }
         ToastManager.getInstance(FaceAddActivity.this).show("长按删除此图！");
     }
@@ -286,23 +306,21 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         if (!isInLow()) {
             return;
         }
-        String userInfo = JsonUtil.faceIngo2Json(editFaceaddName.getText().toString(), editFacedaddUinfo.getText().toString(), sex).toString();
+        facePepleInfo.setUname(editFaceaddName.getText().toString());
+        facePepleInfo.setUinfo(editFacedaddUinfo.getText().toString());
+        String userInfo = JsonUtil.faceIngo2Json(facePepleInfo).toString();
         RequestParams params = HeadUtil.addFace(filePathMap, editFaceaddUid.getText().toString(), userInfo, isReplace);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onCancelled(CancelledException arg0) {
             }
-
             @Override
             public void onError(Throwable arg0, boolean arg1) {
                 ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸注册失败！");
-
             }
-
             @Override
             public void onFinished() {
             }
-
             @Override
             public void onSuccess(String result) {
                 Logger.i(TAG, "添加人脸返回结果" + result);
@@ -318,16 +336,92 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
 
     }
 
+    /**
+     * 根据身份证号向后台发送，返回身份证信息
+     */
+    private void IDCardIdSearch() {
+        RequestParams params = HeadUtil.IDCardIdSearch(editFaceaddUid.getText().toString());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+            }
+
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+            }
+
+            @Override
+            public void onFinished() {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Logger.i(TAG, "身份证号查询结果" + result);
+                Message msg = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putString("result", result);
+                msg.setData(bundle);
+                msg.what = IDCARDSEARCH;
+                handler.sendMessage(msg);
+
+            }
+        });
+
+    }
+    private void sendInfoToService() {
+        RequestParams params = HeadUtil.sendPepleInfoToService(facePepleInfo);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+            }
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+            }
+            @Override
+            public void onFinished() {
+            }
+            @Override
+            public void onSuccess(String result) {
+
+            }
+        });
+
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == ADDSUCCESSFUL) {
                 ToastManager.getInstance(FaceAddActivity.this).show("操作成功！");
+                sendInfoToService();
+            } else if (msg.what == IDCARDSEARCH) {
+                try {
+                    JSONObject jsonObject = new JSONObject(msg.getData().getString("result"));
+                    facePepleInfo.setIDCardAddress(jsonObject.getString("address"));
+                    facePepleInfo.setBirthday(jsonObject.getString("birthday"));
+                    facePepleInfo.setGender(jsonObject.getString("gender"));
+                    facePepleInfo.setIDCardId(jsonObject.getString("IDCardId"));
+                    setEdite();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
             super.handleMessage(msg);
         }
     };
+    private void setEdite(){
+        editFacedaddAddress.setText(facePepleInfo.getIDCardAddress());
+        if(facePepleInfo.getGender() == "男" || "男".equals(facePepleInfo.getGender())){
+            faceidentifyMale.setChecked(true);
+        }else if (facePepleInfo.getGender() == "女" || "女".equals(facePepleInfo.getGender())){
+            faceidentifyFemale.setChecked(true);
+        }
+    }
 
+    /**
+     * 判断输入是否为空或是否符合规定
+     * @return
+     */
     private boolean isInLow() {
         if (editFaceaddUid.getText() == null || "".equals(editFaceaddUid.getText().toString())) {
             ToastManager.getInstance(FaceRApplacation.getContext()).show("请输入人物身份证号！");
@@ -412,8 +506,9 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
                 showDialogDeletPicture(2);
                 break;
         }
-            return false;
-        }
+        return false;
+    }
+
     /**
      * 长按弹出删除dialog
      */
@@ -438,14 +533,15 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         });
         builder.create().show();
     }
-    private void  deletPict(){
-        if(ImageFlag == 0){
+
+    private void deletPict() {
+        if (ImageFlag == 0) {
             faceaddFaceimage0.setImageResource(R.drawable.no_photo2);
             filePathMap.remove(0);
-        }else if(ImageFlag == 1){
+        } else if (ImageFlag == 1) {
             faceaddFaceimage1.setImageResource(R.drawable.no_photo2);
             filePathMap.remove(1);
-        }else {
+        } else {
             faceaddFaceimage2.setImageResource(R.drawable.no_photo2);
             filePathMap.remove(2);
         }

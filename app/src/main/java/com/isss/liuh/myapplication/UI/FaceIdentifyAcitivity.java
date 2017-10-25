@@ -52,11 +52,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * 人脸识别，获取百度库中匹配成功的人脸信息
+ */
 public class FaceIdentifyAcitivity extends BaseActivity {
     private final String TAG = "FaceIdentifyAcitivity";
     private final int FACEIDENTIFY = 10001;
     @BindView(R.id.face_image)
     ImageView faceImage;
+    @BindView(R.id.faceidentify_birth)
+    TextView faceidentifyBirth;
+    @BindView(R.id.faceidentify_address)
+    TextView faceidentifyAddress;
 
     private Bitmap mImage = null;
     private String fileSrc = null;
@@ -74,8 +81,7 @@ public class FaceIdentifyAcitivity extends BaseActivity {
     TextView faceidentifyInfo;
     @BindView(R.id.faceidentify_sex)
     TextView faceidentifySex;
-    @BindView(R.id.faceidentify_remark)
-    TextView faceidentifyRemark;
+
 
     @Override
     public int getLayoutID() {
@@ -113,16 +119,14 @@ public class FaceIdentifyAcitivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-
+        stationView.setText(getResources().getString(R.string.main_titletext));
     }
 
-    @OnClick({R.id.title_back, R.id.faceidentify_remark, R.id.face_image})
+    @OnClick({R.id.title_back, R.id.face_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finishActivity();
-                break;
-            case R.id.faceidentify_remark:
                 break;
             case R.id.face_image:
                 showDdialo();
@@ -273,16 +277,23 @@ public class FaceIdentifyAcitivity extends BaseActivity {
         public void handleMessage(Message msg) {
             if (msg.what == FACEIDENTIFY) {
                 FacePepleInfo facePepleInfo = JsonUtil.faceInfo2FacePeple(msg.getData().getString("result"));
-                if(facePepleInfo.getScores()<70){
-                    faceidentifyRemark.setText("未查到匹配对象！");
-                    faceidentifyRemark.setTextColor(getResources().getColor(R.color.faceiden_1));
+                if (facePepleInfo.getScores() < 70) {
+                    faceidentifyInfo.setText("未查到匹配对象！");
+                    faceidentifyInfo.setTextColor(getResources().getColor(R.color.faceiden_1));
                     return;
                 }
                 faceidentifyName.setText(facePepleInfo.getUname());
-                faceidentifySex.setText(facePepleInfo.getSex());
+                faceidentifySex.setText(facePepleInfo.getGender());
                 faceidentifyId.setText(facePepleInfo.getUid());
+                if(facePepleInfo.getAddress() == null || "".equals(facePepleInfo.getAddress())){
+                    faceidentifyAddress.setText(facePepleInfo.getIDCardAddress());
+                }else{
+                    faceidentifyAddress.setText(facePepleInfo.getAddress());
+                }
+
+                faceidentifyBirth.setText(facePepleInfo.getBirthday());
                 faceidentifyInfo.setText(facePepleInfo.getUinfo());
-                faceidentifyRemark.setTextColor(getResources().getColor(R.color.white));
+                faceidentifyInfo.setTextColor(getResources().getColor(R.color.white));
             }
             super.handleMessage(msg);
         }

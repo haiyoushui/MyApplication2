@@ -62,7 +62,7 @@ public class GetAccessTokenTimerTask extends TimerTask {
             String access_token = jsonObject.getString("access_token");
             String session_key = jsonObject.getString("session_key");
             String refresh_token = jsonObject.getString("refresh_token");
-            long expires_in = jsonObject.getInt("expires_in");
+            int expires_in = jsonObject.getInt("expires_in");
 
             SystemShare.setKeyBAIDUTOKEN(FaceRApplacation.getContext(),access_token,expires_in);
         }catch (Exception e){

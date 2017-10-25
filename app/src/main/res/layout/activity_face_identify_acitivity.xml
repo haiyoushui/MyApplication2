@@ -17,38 +17,45 @@
     android:background="@drawable/no_photo2"
     style="@style/faceidentify" />
     <TextView
-        android:id="@+id/faceidentify_name"
+        android:id="@+id/faceidentify_id"
         style="@style/faceidentify"
-  android:layout_weight="1.12"
-        android:background="@color/faceiden_2"
-        android:text="姓名"/>
+        android:background="@color/faceiden_5"
+        android:textSize="10sp"
+        android:text="证号"/>
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4">
         <TextView
-            android:id="@+id/faceidentify_id"
+            android:id="@+id/faceidentify_name"
+            style="@style/faceidentify"
+            android:background="@color/faceiden_2"
+            android:text="姓名"/>
+        <TextView
+            android:id="@+id/faceidentify_sex"
             style="@style/faceidentify"
             android:background="@color/faceiden_3"
-            android:text="证号"/>
+            android:text="性别"/>
+
         <TextView
-            android:id="@+id/faceidentify_info"
+            android:id="@+id/faceidentify_birth"
             style="@style/faceidentify"
             android:background="@color/faceiden_4"
-            android:text="信息"/>
+            android:text="生日"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4">
         <TextView
-            android:id="@+id/faceidentify_sex"
+            android:id="@+id/faceidentify_address"
             style="@style/faceidentify"
             android:background="@color/faceiden_5"
-            android:text="性别"/>
+            android:text="地址"/>
+
         <TextView
-            android:id="@+id/faceidentify_remark"
+            android:id="@+id/faceidentify_info"
             style="@style/faceidentify"
             android:background="@color/faceiden_6"
             android:text="其他信息"/>

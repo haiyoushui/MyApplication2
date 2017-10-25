@@ -1,6 +1,8 @@
 package com.isss.liuh.myapplication.UI;
 
+
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,25 +22,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dk.view.patheffect.PathTextView;
 import com.eagle.androidlib.baseUI.BaseActivity;
 import com.eagle.androidlib.utils.Logger;
 import com.eagle.androidlib.utils.SystemUtil;
 import com.eagle.androidlib.utils.ToastManager;
-import com.isss.liuh.myapplication.FaceRApplacation;
 import com.isss.liuh.myapplication.NET.HeadUtil;
 import com.isss.liuh.myapplication.R;
 import com.isss.liuh.myapplication.Share.SystemShare;
 import com.isss.liuh.myapplication.UTILS.JsonUtil;
-import com.isss.liuh.myapplication.UTILS.PicUtil;
-import com.isss.liuh.myapplication.UTILS.PubInfo;
-import com.isss.liuh.myapplication.UTILS.utils;
-import com.isss.liuh.myapplication.VO.FaceInfo;
+import com.isss.liuh.myapplication.VO.FacePepleInfo;
 import com.isss.liuh.myapplication.VideoDemo;
 import com.isss.liuh.myapplication.util.FaceUtil;
 
@@ -52,54 +52,38 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.attr.duration;
+import static android.R.attr.radius;
+import static android.R.attr.shadowColor;
 
-public class FaceDetectActivity extends BaseActivity {
-    private final String TAG = "FaceDetectActivity";
-    private final int UPDATEFACEINFO = 10001;
 
-
-    @BindView(R.id.stationView)
-    TextView stationView;
+public class IDCheakActivity extends BaseActivity {
+    private final String TAG = "IDCheakActivity";
+    private final int IDCARD = 10001;
     @BindView(R.id.title_back)
     ImageButton titleBack;
-    @BindView(R.id.faceinfo_age)
-    TextView faceinfoAge;
-    @BindView(R.id.faceinfo_sex)
-    TextView faceinfoSex;
-    @BindView(R.id.faceinfo_race)
-    TextView faceinfoRace;
-    @BindView(R.id.faceinfo_expression)
-    TextView faceinfoExpression;
-    @BindView(R.id.faceinfo_glasses)
-    TextView faceinfoGlasses;
-    @BindView(R.id.faceinfo_beauty)
-    TextView faceinfoBeauty;
-    @BindView(R.id.faceinfo_facetype)
-    TextView faceinfoFacetype;
+    @BindView(R.id.stationView)
+    TextView stationView;
 
-    @BindView(R.id.facedetect_img)
-    ImageView facedetectImg;
-    @BindView(R.id.linear_faceinfo)
-    RelativeLayout linearFaceinfo;
-    @BindView(R.id.linearLayout10)
-    LinearLayout linearLayout10;
-    @BindView(R.id.linearLayout9)
-    LinearLayout linearLayout9;
-    @BindView(R.id.linearLayout12)
-    LinearLayout linearLayout12;
-    @BindView(R.id.linearLayout5)
-    LinearLayout linearLayout5;
-    @BindView(R.id.linearLayout7)
-    LinearLayout linearLayout7;
-    @BindView(R.id.linearLayout6)
-    LinearLayout linearLayout6;
-    @BindView(R.id.linearLayout4)
-    LinearLayout linearLayout4;
+    @BindView(R.id.signin_button)
+    Button signinButton;
+    @BindView(R.id.idcard_faceimage)
+    ImageView idcardFaceimage;
+    @BindView(R.id.iccard_name)
+    EditText iccardName;
+    @BindView(R.id.idcard_id)
+    EditText idcardId;
+
+    private String fileSrc;
     private Bitmap mImage = null;
+
+    private Activity getContext() {
+        return IDCheakActivity.this;
+    }
 
     @Override
     public int getLayoutID() {
-        return R.layout.activity_face_detect;
+        return R.layout.activity_idcheack;
     }
 
     @Override
@@ -112,7 +96,7 @@ public class FaceDetectActivity extends BaseActivity {
 
     @Override
     public void initDataResume() {
-        linearFaceinfo.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -129,34 +113,50 @@ public class FaceDetectActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        stationView.setText(getResources().getString(R.string.title_facedadd));
-        setTextNull();
-        linearLayout4.setBackgroundResource(R.drawable.facedetect_b);
-        linearLayout5.setBackgroundResource(R.drawable.facedetect_c);
-        linearLayout6.setBackgroundResource(R.drawable.facedetect_d);
-        linearLayout7.setBackgroundResource(R.drawable.facedetect_b);
-        linearLayout9.setBackgroundResource(R.drawable.facedetect_e);
-        linearLayout10.setBackgroundResource(R.drawable.facedetect_e);
-        linearLayout12.setBackgroundResource(R.drawable.facedetect_c);
+        setText();
+        stationView.setText(getResources().getString(R.string.title_faceidcheack));
+        ToastManager.getInstance(getContext()).show("本功能暂未启动！");
     }
 
-    @OnClick({R.id.title_back, R.id.facedetect_img})
+    @OnClick({R.id.title_back, R.id.idcard_faceimage,R.id.signin_button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.title_back:
                 finishActivity();
                 break;
-            case R.id.facedetect_img:
+            case R.id.idcard_faceimage:
                 showDdialo();
+                break;
+            case R.id.signin_button:
+                ToastManager.getInstance(getContext()).show("本功能暂未启动！");
+               String uid =  idcardId.getText().toString();
+                String uname = iccardName.getText().toString();
+                if(uid==null||"".equals(uid)||uname==null||"".equals(uname)){
+                    ToastManager.getInstance(getContext()).show("请填写身份证号和姓名");
+
+                }else {
+                    IDCardCheackHttp(HeadUtil.verification(fileSrc, uid,uname));
+                }
+
                 break;
         }
     }
 
-    /**
-     * 弹出图片选择框
-     */
+    private void setText() {
+        PathTextView mPathTextView = (PathTextView) findViewById(R.id.path);
+        mPathTextView.setPaintType(PathTextView.Type.MULTIPLY);
+        mPathTextView.setTextColor(R.color.white);
+        mPathTextView.setTextSize(18);
+        mPathTextView.setTextWeight(3);
+        mPathTextView.setDuration(duration);
+        mPathTextView.setShadow(radius, 4, 4, shadowColor);
+        mPathTextView.init("Hello World");
+        mPathTextView.isShown();
+    }
+
+
     public void showDdialo() {
-        final Dialog dialogPic = new Dialog(FaceDetectActivity.this, R.style.dialog);
+        final Dialog dialogPic = new Dialog(getContext(), R.style.dialog);
 // 性别选择的dialog，以及其上的控件
         View viewPic = getLayoutInflater().inflate(R.layout.dialog_chosepic, null);
 // 设置dialog没有title
@@ -176,9 +176,9 @@ public class FaceDetectActivity extends BaseActivity {
             public void onClick(View v) {
                 dialogPic.dismiss();
                 Intent intent = new Intent();
-                intent.setClass(FaceDetectActivity.this, VideoDemo.class);
-                intent.putExtra("PicPath", SystemUtil.FACEDETECT);
-                startActivityForResult(intent, UIPubInfo.INTENT_FACEDETECT_ACTIVITY);
+                intent.setClass(getContext(), VideoDemo.class);
+                intent.putExtra("PicPath", SystemUtil.FACEIDENTIFYPATH);
+                startActivityForResult(intent, UIPubInfo.INTENT_FACIDENTIFY_ACTIVITY);
             }
         });
         picPick.setOnClickListener(new View.OnClickListener() {
@@ -201,14 +201,12 @@ public class FaceDetectActivity extends BaseActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
-        String fileSrc = null;
         switch (requestCode) {
-            case UIPubInfo.INTENT_FACEDETECT_ACTIVITY:
+            case UIPubInfo.INTENT_FACIDENTIFY_ACTIVITY:
                 fileSrc = data.getExtras().getString("picpathandname");
-                setImageAndDetect(fileSrc);
+                setImageToView(fileSrc);
                 break;
             case FaceUtil.REQUEST_PICTURE_CHOOSE:
-
                 if ("file".equals(data.getData().getScheme())) {
                     // 有些低版本机型返回的Uri模式为file
                     fileSrc = data.getData().getPath();
@@ -222,12 +220,11 @@ public class FaceDetectActivity extends BaseActivity {
                     fileSrc = cursor.getString(idx);
                     cursor.close();
                 }
-                if (SystemShare.getSYSISCUTPIC(FaceDetectActivity.this)) {
+                if (SystemShare.getSYSISCUTPIC(getContext())) {
                     FaceUtil.cropPicture(this, Uri.fromFile(new File(fileSrc)));  // 跳转到图片裁剪页面
                 } else {
-                    setImageAndDetect(fileSrc);//如果不剪切直接检测的话
+                    setImageToView(fileSrc);//如果不剪切直接检测的话
                 }
-
                 break;
             case FaceUtil.REQUEST_CROP_IMAGE:
                 // 获取返回数据
@@ -236,19 +233,18 @@ public class FaceDetectActivity extends BaseActivity {
                     // 若返回数据不为null，保存至本地，防止裁剪时未能正常保存
                     if (null != mImage) {
                         if (Build.VERSION.SDK_INT >= 23) {
-                            int permissionCheck = ContextCompat.checkSelfPermission(FaceDetectActivity.this,
+                            int permissionCheck = ContextCompat.checkSelfPermission(getContext(),
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
                             if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(FaceDetectActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 100);
+                                ActivityCompat.requestPermissions(getContext(), new String[]{Manifest.permission.CALL_PHONE}, 100);
                                 return;
                             }
                         }
-
-                        FaceUtil.saveBitmapToFile(FaceDetectActivity.this, mImage);
+                        FaceUtil.saveBitmapToFile(getContext(), mImage);
                     }
                     // 获取图片保存路径
-                    fileSrc = FaceUtil.getImagePath(FaceDetectActivity.this);
-                    setImageAndDetect(fileSrc);
+                    fileSrc = FaceUtil.getImagePath(getContext());
+                    setImageToView(fileSrc);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -259,27 +255,22 @@ public class FaceDetectActivity extends BaseActivity {
     }
 
     /**
-     * 通过百度API获取人脸信息
+     * 向百度人脸库添加人脸
      *
      * @param fileSrc
      */
-    private void setImageAndDetect(String fileSrc) {
-        Logger.i(TAG, "百度人脸检测PicPath:" + fileSrc);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPurgeable = true;
-        options.inSampleSize = 1;
-        mImage = BitmapFactory.decodeFile(fileSrc, options);
-        setTextNull();
-        facedetectImg.setImageBitmap(PicUtil.getOvalBitmap(mImage));
-        x.http().post(HeadUtil.detectFace(fileSrc), new Callback.CommonCallback<String>() {
+    private void FaceIdentifyHttp(String fileSrc, RequestParams params) {
+
+
+        x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onCancelled(CancelledException arg0) {
             }
 
             @Override
             public void onError(Throwable arg0, boolean arg1) {
-                ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸检测失败！");
-                Logger.e(TAG, "人脸检测失败！");
+              //  ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸识别失败！");
+                Logger.e(arg0.toString());
             }
 
             @Override
@@ -288,58 +279,72 @@ public class FaceDetectActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String result) {
-                Logger.i(TAG, "FaceDetectResult = " + result);
+                Logger.i(TAG, "人脸识别结果" + result);
                 Message msg = new Message();
                 Bundle bundle = new Bundle();
                 bundle.putString("result", result);
                 msg.setData(bundle);
-                msg.what = UPDATEFACEINFO;
+                msg.what = IDCARD;
                 handler.sendMessage(msg);
 
             }
         });
 
     }
+    private void IDCardCheackHttp( RequestParams params) {
 
+
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+                Logger.e("##############"+arg0.toString());
+            }
+
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+                //  ToastManager.getInstance(FaceRApplacation.getContext()).show("人脸识别失败！");
+                Logger.e("##############"+arg0.toString());
+            }
+
+            @Override
+            public void onFinished() {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Logger.i(TAG, "##############人脸识别结果" + result);
+
+            }
+        });
+
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == UPDATEFACEINFO) {
-                setFaceInfo(msg.getData().getString("result"));
+            if (msg.what == IDCARD) {
+                FacePepleInfo facePepleInfo = JsonUtil.faceInfo2FacePeple(msg.getData().getString("result"));
+                if (facePepleInfo.getScores() > 70) {
+                        idcardId.setText(facePepleInfo.getUid());
+                        iccardName.setText(facePepleInfo.getUname());
+                    IDCardCheackHttp(HeadUtil.verification(fileSrc, facePepleInfo.getUid(),facePepleInfo.getUname()));
+                }else {
+
+                }
+
             }
             super.handleMessage(msg);
         }
     };
 
-    /**
-     * 将获取的百度检测人脸信息显示
-     *
-     * @param faceInfo
-     */
-    private void setFaceInfo(String faceInfo) {
-        FaceInfo faceInfoO = JsonUtil.jsonToFaceInfo(faceInfo);
-        Logger.d(TAG, "人脸信息" + faceInfoO.toString());
-        if (faceInfoO.getResultNum() >= 1) {
-            faceinfoAge.setText((int) faceInfoO.getAge() + "");
-            faceinfoBeauty.setText((int) faceInfoO.getBeauty() + "");
-            faceinfoSex.setText(faceInfoO.getFaceGender() + "");
-            faceinfoRace.setText(faceInfoO.getFaceRace() + "");
-            faceinfoExpression.setText(faceInfoO.getFaceExpression() + "");
-            faceinfoGlasses.setText(faceInfoO.getFaceGlasses() + "");
-            faceinfoFacetype.setText(faceInfoO.getFaceType() + "");
-            linearFaceinfo.setVisibility(View.VISIBLE);
-        }
 
+    private void setImageToView(String fileSrc) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        options.inSampleSize = 1;
+        idcardFaceimage.setImageBitmap(BitmapFactory.decodeFile(fileSrc, options));
+        FaceIdentifyHttp(fileSrc,HeadUtil.identifyFace(fileSrc, "1"));
     }
-private void setTextNull(){
-    faceinfoAge.setText( "");
-    faceinfoBeauty.setText( "");
-    faceinfoSex.setText( "");
-    faceinfoRace.setText( "");
-    faceinfoExpression.setText("");
-    faceinfoGlasses.setText( "");
-    faceinfoFacetype.setText("");
-}
+
     /**
      * 关闭Activity
      */
@@ -365,5 +370,4 @@ private void setTextNull(){
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

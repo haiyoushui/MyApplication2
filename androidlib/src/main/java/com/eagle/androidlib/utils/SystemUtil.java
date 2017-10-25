@@ -45,9 +45,12 @@ public class SystemUtil {
     public static void initPICDir() {
         SystemUtil. LICENSEPATH= Environment.getExternalStorageDirectory() + "/Isss/MyLicense/";
         SystemUtil. LOGPATH = Environment.getExternalStorageDirectory() + "/Isss/LOG/";
-        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceDetect/";
-        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFace/";
-        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceIdentify/";
+//        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceDetect/";
+//        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFace/";
+//        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceIdentify/";
+        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
+        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
+        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
         //判断sd卡 创建临时图片存放文件夹
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -62,7 +65,7 @@ public class SystemUtil {
 
 //
 //    /**
-//     * 将图片移动到成功上传的路径下
+//     * 将图片移动到路径下
 //     */
 //    public static void moveTmpPic2SUCCESSUPLOADPATH(List<String> imageList) {
 //        if (imageList == null || imageList.size() == 0) return;

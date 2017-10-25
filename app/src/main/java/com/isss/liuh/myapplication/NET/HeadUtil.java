@@ -2,12 +2,12 @@ package com.isss.liuh.myapplication.NET;
 
 import com.isss.liuh.myapplication.FaceRApplacation;
 import com.isss.liuh.myapplication.Share.SystemShare;
-import com.isss.liuh.myapplication.UI.FaceDetectActivity;
+import com.isss.liuh.myapplication.UTILS.JsonUtil;
 import com.isss.liuh.myapplication.UTILS.PubInfo;
 import com.isss.liuh.myapplication.UTILS.utils;
+import com.isss.liuh.myapplication.VO.FacePepleInfo;
 
 import org.xutils.http.RequestParams;
-
 import java.io.File;
 import java.util.HashMap;
 
@@ -24,6 +24,11 @@ public class HeadUtil {
      * @param isReplace
      * @return
      */
+    public static  RequestParams addFace(String fileSrc, String uid, String user_info, boolean isReplace) {
+        HashMap<Integer,String> filePathMap = new HashMap<>();
+        filePathMap.put(0,fileSrc);
+        return addFace(filePathMap,  uid,  user_info,  isReplace);
+    }
     public static RequestParams addFace(HashMap<Integer,String> fileSrc, String uid, String user_info, boolean isReplace){
         RequestParams params;
         if(isReplace){
@@ -58,6 +63,19 @@ public class HeadUtil {
     }
 
     /**
+     * 百度人脸检测，获得年龄表情种族的信息
+     * @param fileSrc
+     * @return
+     */
+    public static RequestParams detectFace(String fileSrc){
+        RequestParams params = new RequestParams(PubInfo.URL_Baidu_Detect + "?access_token=" + SystemShare.getBAIDUTOKEN(FaceRApplacation.getContext()));
+        params.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        params.addBodyParameter("image", utils.fileToBase64(fileSrc));
+        params.addBodyParameter("face_fields", "age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities");
+        params.setMultipart(true);
+        return params;
+    }
+    /**
      * 百度人脸识别请求参数
      * @param fileSrc
      * @param userTopNum
@@ -81,7 +99,37 @@ public class HeadUtil {
         params.addBodyParameter("id_number", uid);
         params.addBodyParameter("name", uname);
         params.addBodyParameter("selfie_file",file);
-        params.addBodyParameter("selfie_auto_rotate", PubInfo.BaiduFace_group_id);//开启图片自动旋转功能。开通：true，不开通：false。默认不开通  打开自动旋转功能会增加运算时间,请酌情考虑是否开通此功能
+         return params;
+    }
+
+    /**
+     * 百度扫描身份证信息
+     * @param fileSrc
+     * @return
+     */
+    public static RequestParams BaiduIDCardInfo(String fileSrc){
+        RequestParams params = new RequestParams(PubInfo.BaiduFace_IDCard_url+ "?access_token=" + SystemShare.getBAIDUTOKEN(FaceRApplacation.getContext()));
+        try{
+            params.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            params.addBodyParameter("detect_direction", "true");//是否检测图像朝向，默认不检测，即：false。朝向是指输入图像是正常方向、逆时针旋转90/180/270度。可选值包括:
+            params.addBodyParameter("id_card_side", "front");//front：身份证正面；back：身份证背面
+            params.addBodyParameter("detect_risk","false");//是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，
+            params.addBodyParameter("image", utils.fileToBase64(fileSrc));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return params;
+    }
+    public static RequestParams IDCardIdSearch(String idcardid){
+        RequestParams params = new RequestParams(PubInfo.URL__Service_IDCard_Search+ idcardid);
+        return params;
+    }
+
+    public static  RequestParams sendPepleInfoToService(FacePepleInfo facePepleInfo){
+        RequestParams params = new RequestParams(PubInfo.URL_Service_AddFace);
+        params.addHeader("Content-Type", "application/json;charset=UTF-8");
+        params.addBodyParameter("pepleinfo", JsonUtil.faceIngo2Json(facePepleInfo).toString());
         return params;
     }
 }

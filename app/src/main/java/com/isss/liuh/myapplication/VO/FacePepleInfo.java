@@ -12,8 +12,55 @@ public class FacePepleInfo {
     private String uinfo;
     private String time;
     private String IMEI;
-    private String sex;
+    private String gender;
     private String faceliveness;//ext_fields特殊返回信息，多个用逗号分隔，取值固定: 目前支持 faceliveness(活体检测)
+    private String address;
+    private String birthday;
+    private String IDCardId;
+    private String IDCardAddress;
+    private String ethnic;//民族
+
+    public String getIDCardAddress() {
+        return IDCardAddress;
+    }
+
+    public void setIDCardAddress(String IDCardAddress) {
+        this.IDCardAddress = IDCardAddress;
+    }
+
+    public String getEthnic() {
+        return ethnic;
+    }
+
+    public void setEthnic(String ethnic) {
+        this.ethnic = ethnic;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+
+    public String getIDCardId() {
+        return IDCardId;
+    }
+
+    public void setIDCardId(String IDCardId) {
+        this.IDCardId = IDCardId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getUid() {
         return uid;
     }
@@ -70,12 +117,12 @@ public class FacePepleInfo {
         this.IMEI = IMEI;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getFaceliveness() {

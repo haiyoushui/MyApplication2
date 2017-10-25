@@ -10,20 +10,20 @@ public class PubInfo {
     /**
      * 百度appkey
      */
-    private static final String Baidu_APIKey = "5hG2XFuNWNg0VkPxSYUOIzR3";
+    public static final String Baidu_APIKey = "5hG2XFuNWNg0VkPxSYUOIzR3";
     /**
      * 百度SecretKey
      */
-    private static final String Baidu_SecretKey = "9C4G7BjXdaVaXH1SY27QQObzEWz3xw3m";
+    public static final String Baidu_SecretKey = "9C4G7BjXdaVaXH1SY27QQObzEWz3xw3m";
 
     /**
      * LinkFaceappkey
      */
-    public static final String LinkFace_APIKey = "jfrPdfmVkXyh03FmWIU_LpHUzApuJnaU";
+    public static final String LinkFace_APIKey = "5d9bca009efa4770b67969483f3569f1";
     /**
      * LinkFaceSecretKey
      */
-    public static final String LinkFace_SecretKey = "hgoFoKw3Aw4C5KxeSHMHD9t7jIqMohKG";
+    public static final String LinkFace_SecretKey = "e84729e6884f4a46a6112d8e20a064b3";
 
 
     /**
@@ -51,7 +51,21 @@ public class PubInfo {
     public static final String URL_Baidu_Identify = "https://aip.baidubce.com/rest/2.0/face/v2/identify";
     public static final String BaiduFace_group_id = "ISSS_2017_T";//百度人脸库的组名称
     /**
+     * 百度身份证信息扫描
+     */
+
+    public static final String BaiduFace_IDCard_url= "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard";
+    /**
      * LinkFace 检测身份证信息与照片是否同一人
      */
-    public static final String URL_LinkFace_Verification = "https://cloudapi.linkface.cn/identity/selfie_idnumber_verificatio";
+    public static final String URL_LinkFace_Verification = "https://cloudapi.linkface.cn/identity/liveness_idnumber_verification";
+
+    /**
+     * 后台搜索身份证信息
+     */
+    public static final String URL__Service_IDCard_Search = "http://222.29.97.54:8080/WeChatRobot/IDCard/search/";
+    /**
+     * 后台结束添加人脸库的信息
+     */
+    public static final String URL_Service_AddFace = "http://222.29.97.54:8080/WeChatRobot/FaceRC/addFaceInfo/";
 }

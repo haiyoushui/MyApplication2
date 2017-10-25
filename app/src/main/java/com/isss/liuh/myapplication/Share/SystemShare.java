@@ -20,10 +20,10 @@ public class SystemShare {
 
     private static final String SYSISCUTPIC = "iscutpic";//系统设置，是否打开图片剪切功能
 
-    public static void setKeyBAIDUTOKEN(Context context, String baiduToken,long expiresIn) {
+    public static void setKeyBAIDUTOKEN(Context context, String baiduToken,int expiresIn) {
         SharedPreferences.Editor editor = context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).edit();
         editor.putString(BAIDUTOKEN, baiduToken);
-        editor.putLong(BAIDUEXPIRESIN, expiresIn);
+        editor.putInt(BAIDUEXPIRESIN, expiresIn);
         editor.putString(BAIDUSAVETIME, DateUtil.getCurrentDateTimeStr());
         editor.commit();
     }
@@ -38,8 +38,8 @@ public class SystemShare {
         }
         return accessToken;
     }
-    public static Long getBAIDUEXPIRESIN(Context context){
-        return context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).getLong(BAIDUEXPIRESIN,2592000);
+    public static int getBAIDUEXPIRESIN(Context context){
+        return context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).getInt(BAIDUEXPIRESIN,2592000);
     }
     public static String getBAIDUTBAIDUSAVETIME(Context context){
         return context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).getString(BAIDUSAVETIME,"2000-1-1 00:00:00");

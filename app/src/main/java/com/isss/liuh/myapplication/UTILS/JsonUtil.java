@@ -161,15 +161,17 @@ public class JsonUtil {
     public static JSONObject faceIngo2Json(FacePepleInfo facePepleInfo){
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("uname",facePepleInfo.getUname());
-            jsonObject.put("sex",facePepleInfo.getUname());
-            jsonObject.put("birthday",facePepleInfo.getBirthday());
-            jsonObject.put("uinfo",facePepleInfo.getUinfo());
-            jsonObject.put("address",facePepleInfo.getAddress());
-            jsonObject.put("idcardaddress",facePepleInfo.getIDCardAddress());
-            jsonObject.put("ethnic",facePepleInfo.getEthnic());
-            jsonObject.put("idcardid",facePepleInfo.getIDCardId());
-            jsonObject.put("time", DateUtil.getCurrentDateStrYYYYMMDDHHMMSS());
+            jsonObject.put("groupid",PubInfo.BaiduFace_group_id);//百度人脸库中groupID
+            jsonObject.put("uname",facePepleInfo.getUname()+"");
+            jsonObject.put("gender",facePepleInfo.getGender()+"");
+            jsonObject.put("birthday",facePepleInfo.getBirthday()+"");
+            jsonObject.put("uinfo",facePepleInfo.getUinfo()+"");
+            jsonObject.put("address",facePepleInfo.getAddress()+"");
+            jsonObject.put("idcardaddress",facePepleInfo.getIDCardAddress()+"");
+            jsonObject.put("ethnic",facePepleInfo.getEthnic()+"");
+            jsonObject.put("idcardid",facePepleInfo.getIDCardId()+"");
+            jsonObject.put("uid",facePepleInfo.getUid()+"");
+            jsonObject.put("time", DateUtil.getCurrentDateStrYYYYMMDDHHMMSS()+"");
             jsonObject.put("IMEI", AppUtil.getIMEI(FaceRApplacation.getContext()));
         }catch (Exception e){
             e.printStackTrace();
@@ -197,7 +199,7 @@ public class JsonUtil {
           facePepleInfo.setEthnic(jsonUserInfo.getString("ethnic"));
           facePepleInfo.setTime(jsonUserInfo.getString("time"));
           facePepleInfo.setIMEI(jsonUserInfo.getString("IMEI"));
-          facePepleInfo.setGender(jsonUserInfo.getString("sex"));
+          facePepleInfo.setGender(jsonUserInfo.getString("gender"));
           facePepleInfo.setFaceliveness(jsonObject.getJSONArray("ext_info").getJSONObject(0).getString("faceliveness"));
       }catch (Exception e){
           e.printStackTrace();

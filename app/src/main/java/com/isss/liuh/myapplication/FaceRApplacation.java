@@ -2,10 +2,12 @@ package com.isss.liuh.myapplication;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
 import com.eagle.androidlib.utils.DateUtil;
 import com.eagle.androidlib.utils.SystemUtil;
 import com.iflytek.cloud.SpeechUtility;
+import com.isss.liuh.myapplication.SERVICE.SendPicToServiceServer;
 import com.isss.liuh.myapplication.TimerTask.GetAccessTokenTimerTask;
 import com.isss.liuh.myapplication.UTILS.PubInfo;
 
@@ -46,6 +48,8 @@ public class FaceRApplacation extends Application {
 		timerGetAcceToken.schedule(timerA,
 				DateUtil.parseDateTime("2016-11-16 09:00:00"),
 				PubInfo.getAccess_token_baidu_timer);
+		//开启发送图片服务
+		startService(new Intent(getContext(),SendPicToServiceServer.class));
 
 	}
 

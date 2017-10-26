@@ -85,8 +85,6 @@ public class FaceIDCardActivity extends BaseActivity {
     Button signinButton;
     @BindView(R.id.idcard_faceimage)
     ImageView idcardFaceimage;
-    @BindView(R.id.path)
-    PathTextView path;
     @BindView(R.id.idcard_address)
     EditText idcardAddress;
     @BindView(R.id.faceidentify_male)
@@ -100,7 +98,7 @@ public class FaceIDCardActivity extends BaseActivity {
     private String fileSrc;
     private Bitmap mImage = null;
     private FacePepleInfo facePepleInfo = new FacePepleInfo();
-
+    private String filePath = SystemUtil.ADDFACEPATH;
     private Activity getContext() {
         return FaceIDCardActivity.this;
     }
@@ -208,7 +206,7 @@ public class FaceIDCardActivity extends BaseActivity {
                 dialogPic.dismiss();
                 Intent intent = new Intent();
                 intent.setClass(getContext(), VideoDemo.class);
-                intent.putExtra("PicPath", SystemUtil.FACEIDENTIFYPATH);
+                intent.putExtra("PicPath", filePath);
                 startActivityForResult(intent, UIPubInfo.INTENT_FACIDENTIFY_ACTIVITY);
             }
         });
@@ -291,7 +289,13 @@ public class FaceIDCardActivity extends BaseActivity {
      * @param fileSrc
      */
     private void addFaceHttp(String fileSrc, boolean isReplace) {
+        if (!isInLow()) {
+            return;
+        }
 
+        facePepleInfo.setUname(iccardName.getText().toString());
+        facePepleInfo.setUinfo("身份证扫描入录");
+        facePepleInfo.setAddress(idcardAddress.getText().toString());
         String userInfo = JsonUtil.faceIngo2Json(facePepleInfo).toString();
         RequestParams params = HeadUtil.addFace(fileSrc, idcardId.getText().toString(), userInfo, isReplace);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -397,13 +401,34 @@ public class FaceIDCardActivity extends BaseActivity {
         });
 
     }
-
+    /**
+     * 向后台发送人脸信息
+     */
+    private void sendInfoToService() {
+        RequestParams params = HeadUtil.sendPepleInfoToService(facePepleInfo);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onCancelled(CancelledException arg0) {
+            }
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+            }
+            @Override
+            public void onFinished() {
+            }
+            @Override
+            public void onSuccess(String result) {
+                fileSrc = SystemUtil.moveFileToAddFaceSucees(fileSrc,facePepleInfo.getUid());
+                clearAll();
+            }
+        });
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == ADDFACE) {
                 ToastManager.getInstance(getContext()).show("操作成功！");
-
+                sendInfoToService();
             } else if (msg.what == IDCARD || msg.what == IDCARDSEARCH) {
                 //身份证扫描结果显示
                 idcardId.setText(facePepleInfo.getIDCardId());
@@ -434,7 +459,32 @@ public class FaceIDCardActivity extends BaseActivity {
         idcardFaceimage.setImageBitmap(BitmapFactory.decodeFile(fileSrc, options));
         recIDCard(IDCardParams.ID_CARD_SIDE_FRONT, fileSrc);
     }
-
+    /**
+     * 判断输入是否为空或是否符合规定
+     * @return
+     */
+    private boolean isInLow() {
+        if (idcardId.getText() == null || "".equals(idcardId.getText().toString())) {
+            ToastManager.getInstance(FaceRApplacation.getContext()).show("请输入人物身份证号！");
+            return false;
+        } else if (iccardName.getText().toString() == null || "".equals(iccardName.getText().toString())) {
+            ToastManager.getInstance(FaceRApplacation.getContext()).show("请输入人物姓名！");
+            return false;
+        } else if (fileSrc == null) {
+            ToastManager.getInstance(FaceRApplacation.getContext()).show("请选择人物图片！");
+            showDdialo();
+            return false;
+        } else {
+            return true;
+        }
+    }
+    private void clearAll(){
+        iccardName.setText("");
+        idcardId.setText("");
+        idcardAddress.setText("");
+        fileSrc = null;
+        idcardFaceimage.setImageResource(R.drawable.no_photo2);
+    }
     /**
      * 关闭Activity
      */

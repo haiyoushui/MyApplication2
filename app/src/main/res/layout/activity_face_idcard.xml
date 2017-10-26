@@ -8,10 +8,30 @@
 
     <include layout="@layout/app_bar_back"
         android:id="@+id/include"></include>
+
+
+
     <RelativeLayout
+        android:layout_weight="4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/idcard_faceimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_vertical_margin1"
+            android:layout_marginLeft="@dimen/list_vertical_margin3"
+            android:layout_marginRight="@dimen/list_vertical_margin3"
+            android:background="@drawable/no_photo2" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_weight="6"
         android:id="@+id/login_div"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:padding="15dip"
         android:layout_margin="15dip"
         android:background="@drawable/idcard_input_bg" >
@@ -111,24 +131,4 @@
             android:layout_alignParentStart="true" />
 
     </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_weight="4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-        <ImageView
-            android:id="@+id/idcard_faceimage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/list_vertical_margin1"
-            android:layout_marginLeft="@dimen/list_vertical_margin3"
-            android:layout_marginRight="@dimen/list_vertical_margin3"
-            android:background="@drawable/no_photo2" />
-    </RelativeLayout>
-    <com.dk.view.patheffect.PathTextView
-        android:id="@+id/path"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 </LinearLayout>

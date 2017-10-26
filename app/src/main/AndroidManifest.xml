@@ -84,6 +84,13 @@
             android:name=".UI.FaceIDCardActivity"
             android:label="@string/title_activity_face_gn"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <service
+            android:name=".SERVICE.SendPicToServiceServer"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.eaglesoft.vehcapture.ImageSender" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

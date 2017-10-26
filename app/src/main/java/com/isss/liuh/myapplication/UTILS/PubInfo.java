@@ -59,13 +59,18 @@ public class PubInfo {
      * LinkFace 检测身份证信息与照片是否同一人
      */
     public static final String URL_LinkFace_Verification = "https://cloudapi.linkface.cn/identity/liveness_idnumber_verification";
-
+    private static  String URL_Server_IP = "222.29.97.190";
     /**
      * 后台搜索身份证信息
      */
-    public static final String URL__Service_IDCard_Search = "http://222.29.97.54:8080/WeChatRobot/IDCard/search/";
+    public static final String URL__Service_IDCard_Search = "http://"+URL_Server_IP+":8080/WeChatRobot/IDCard/search/";
     /**
-     * 后台结束添加人脸库的信息
+     * 后台接收添加人脸库的信息
      */
-    public static final String URL_Service_AddFace = "http://222.29.97.54:8080/WeChatRobot/FaceRC/addFaceInfo/";
+    public static final String URL_Service_AddFace = "http://"+URL_Server_IP+":8080/WeChatRobot/FaceRC/addFaceInfo/";
+    /**
+     * 后台接收添加人脸库的图片
+     */
+    public static final String URL_Service_AddFacePic = "http://"+URL_Server_IP+":8080/WeChatRobot/FaceRC/addFaceFile/";
+
 }

@@ -299,15 +299,15 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
 
     /**
      * 向百度人脸库添加人脸
-     *
-     * @param fileSrc
+
      */
-    private void addFaceHttp(String fileSrc, boolean isReplace) {
+    private void addFaceHttp( boolean isReplace) {
         if (!isInLow()) {
             return;
         }
         facePepleInfo.setUname(editFaceaddName.getText().toString());
         facePepleInfo.setUinfo(editFacedaddUinfo.getText().toString());
+        facePepleInfo.setAddress(editFacedaddAddress.getText().toString());
         String userInfo = JsonUtil.faceIngo2Json(facePepleInfo).toString();
         RequestParams params = HeadUtil.addFace(filePathMap, editFaceaddUid.getText().toString(), userInfo, isReplace);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -368,6 +368,10 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         });
 
     }
+
+    /**
+     * 向后台发送人脸信息
+     */
     private void sendInfoToService() {
         RequestParams params = HeadUtil.sendPepleInfoToService(facePepleInfo);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -382,10 +386,10 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
             }
             @Override
             public void onSuccess(String result) {
-
+                fileSrc = SystemUtil.moveFileToAddFaceSucees(fileSrc,facePepleInfo.getUid());
+                clearAll();
             }
         });
-
     }
     private Handler handler = new Handler() {
         @Override
@@ -416,6 +420,7 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
         }else if (facePepleInfo.getGender() == "女" || "女".equals(facePepleInfo.getGender())){
             faceidentifyFemale.setChecked(true);
         }
+        facePepleInfo.setUid(editFaceaddUid.getText().toString());
     }
 
     /**
@@ -485,10 +490,10 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
                 showDdialo();
                 break;
             case R.id.face_add:
-                addFaceHttp(fileSrc, false);
+                addFaceHttp(false);
                 break;
             case R.id.face_replace:
-                addFaceHttp(fileSrc, true);
+                addFaceHttp(true);
                 break;
         }
     }
@@ -545,5 +550,16 @@ public class FaceAddActivity extends BaseActivity implements View.OnLongClickLis
             faceaddFaceimage2.setImageResource(R.drawable.no_photo2);
             filePathMap.remove(2);
         }
+    }
+    private void clearAll(){
+        editFaceaddUid.setText("");
+        editFacedaddAddress.setText("");
+        editFaceaddName.setText("");
+        editFacedaddUinfo.setText("");
+        fileSrc = null;
+        faceaddFaceimage0.setImageResource(R.drawable.no_photo2);
+        faceaddFaceimage1.setImageResource(R.drawable.no_photo2);
+        faceaddFaceimage2.setImageResource(R.drawable.no_photo2);
+        filePathMap.clear();
     }
 }

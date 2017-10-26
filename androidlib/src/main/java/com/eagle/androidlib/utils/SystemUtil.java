@@ -32,9 +32,13 @@ public class SystemUtil {
      */
     public static String FACEDETECT = null;
     /**
-     * 人脸注册的图片
+     * 人脸注册的暂时保存的图片，此文件夹下的图片不一定往百度人脸库上传成功
      */
     public static String ADDFACEPATH = null;
+    /**
+     * 人脸注册的上传成功的图片
+     */
+    public static String ADDFACESUCCESSPATH = null;
     /**
      * 人脸识别的图片
      */
@@ -45,12 +49,10 @@ public class SystemUtil {
     public static void initPICDir() {
         SystemUtil. LICENSEPATH= Environment.getExternalStorageDirectory() + "/Isss/MyLicense/";
         SystemUtil. LOGPATH = Environment.getExternalStorageDirectory() + "/Isss/LOG/";
-//        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceDetect/";
-//        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFace/";
-//        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceIdentify/";
-        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
-        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
-        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/";
+        SystemUtil. FACEDETECT = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceDetect/";
+        SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFace/";
+        SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceIdentify/";
+        SystemUtil. ADDFACESUCCESSPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFaceSuccess/";
         //判断sd卡 创建临时图片存放文件夹
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -59,6 +61,7 @@ public class SystemUtil {
             SystemUtil.makedir(SystemUtil.FACEDETECT);
             SystemUtil.makedir(SystemUtil.ADDFACEPATH);
             SystemUtil.makedir(SystemUtil.FACEIDENTIFYPATH);
+            SystemUtil.makedir(SystemUtil.ADDFACESUCCESSPATH);
         }
     }
 
@@ -112,7 +115,16 @@ public class SystemUtil {
             return null;
         }
     }
-
+    public static String moveFileToAddFaceSucees(String filePath,String uid){
+        File file = new File(filePath);
+        String newPath = SystemUtil.ADDFACESUCCESSPATH+uid+"_"+ file.getName();
+        Log.i("", "移动文件" + filePath + "--->" + newPath);
+        if (file.renameTo(new File(newPath))) {
+            return newPath;
+        } else {
+            return null;
+        }
+    }
     /**
      * 移动文件位置，不修改文件名
      *

@@ -16,9 +16,9 @@ public class MainActivity extends BaseActivity {
     private CircleMenuLayout mCircleMenuLayout;
 
 
-    private int[] mItemImgs = new int[] { R.drawable.main_faceadd,
+    private int[] mItemImgs = new int[] {R.drawable.main_faceremark ,
             R.drawable.mai_faceidenti, R.drawable.main_facedetect,
-            R.drawable.main_faceshenfen, R.drawable.main_faceremark};
+            R.drawable.main_faceshenfen, R.drawable.main_faceadd};
     private String[] mItemTexts = new String[] { };
     @Override
     public int getLayoutID() {

@@ -6,11 +6,15 @@ import com.eagle.androidlib.utils.AppUtil;
 import com.eagle.androidlib.utils.DateUtil;
 import com.eagle.androidlib.utils.Logger;
 import com.isss.liuh.myapplication.FaceRApplacation;
+import com.isss.liuh.myapplication.Share.SystemShare;
+import com.isss.liuh.myapplication.VO.AllowLicense;
 import com.isss.liuh.myapplication.VO.FaceInfo;
 import com.isss.liuh.myapplication.VO.FacePepleInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 /**
  * Created by LiuH on 2017/10/13.
@@ -206,4 +210,30 @@ public class JsonUtil {
       }
       return facePepleInfo;
     }
+    public static AllowLicense JsonToAllowLicense(){
+
+        AllowLicense allowLicense = new AllowLicense();
+        try{
+            JSONObject jsonObject = new JSONObject(SystemShare.getLicense(FaceRApplacation.getContext()));
+            allowLicense.setIsAllow(jsonObject.getInt("isAllow"));
+            allowLicense.setStartTime(jsonObject.getString("startTime"));
+            allowLicense.setEndTime(jsonObject.getString("endTime"));
+            allowLicense.setFunction1(jsonObject.getString("function1"));
+            allowLicense.setFunction2(jsonObject.getString("function2"));
+            allowLicense.setFunction3(jsonObject.getString("function3"));
+            allowLicense.setFunction4(jsonObject.getString("function4"));
+            allowLicense.setFunction5(jsonObject.getString("function5"));
+            allowLicense.setFunction6(jsonObject.getString("function6"));
+            allowLicense.setFunction7(jsonObject.getString("function7"));
+            allowLicense.setFunction8(jsonObject.getString("function8"));
+            allowLicense.setFunction9(jsonObject.getString("function9"));
+            allowLicense.setRemark(jsonObject.getString("remark"));
+            allowLicense.setIMEI(jsonObject.getString("imei"));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return allowLicense;
+    }
+
 }

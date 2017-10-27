@@ -1,15 +1,20 @@
 package com.isss.liuh.myapplication.NET;
 
+import com.eagle.androidlib.utils.AppUtil;
+import com.eagle.androidlib.utils.DateUtil;
 import com.isss.liuh.myapplication.FaceRApplacation;
 import com.isss.liuh.myapplication.Share.SystemShare;
 import com.isss.liuh.myapplication.UTILS.JsonUtil;
 import com.isss.liuh.myapplication.UTILS.PubInfo;
 import com.isss.liuh.myapplication.UTILS.utils;
 import com.isss.liuh.myapplication.VO.FacePepleInfo;
+import android.location.Location;
 
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by LiuH on 2017/10/13.
@@ -103,33 +108,40 @@ public class HeadUtil {
     }
 
     /**
-     * 百度扫描身份证信息
-     * @param fileSrc
+     * 向后台发送身份证号，查询信息
+     * @param idcardid
      * @return
      */
-    public static RequestParams BaiduIDCardInfo(String fileSrc){
-        RequestParams params = new RequestParams(PubInfo.BaiduFace_IDCard_url+ "?access_token=" + SystemShare.getBAIDUTOKEN(FaceRApplacation.getContext()));
-        try{
-            params.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            params.addBodyParameter("detect_direction", "true");//是否检测图像朝向，默认不检测，即：false。朝向是指输入图像是正常方向、逆时针旋转90/180/270度。可选值包括:
-            params.addBodyParameter("id_card_side", "front");//front：身份证正面；back：身份证背面
-            params.addBodyParameter("detect_risk","false");//是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，
-            params.addBodyParameter("image", utils.fileToBase64(fileSrc));
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return params;
-    }
     public static RequestParams IDCardIdSearch(String idcardid){
         RequestParams params = new RequestParams(PubInfo.URL__Service_IDCard_Search+ idcardid);
+        params.addHeader("IMEI",PubInfo.IMEI); // 为当前请求添加一个头,设备编号
+//        Location location = AppUtil.getLocation(FaceRApplacation.getContext());
+//        params.addHeader("location","经度："+location.getLongitude()+"纬度："+location.getLatitude()); // 为当前请求添加一个头,设备编号
         return params;
     }
 
     public static  RequestParams sendPepleInfoToService(FacePepleInfo facePepleInfo){
         RequestParams params = new RequestParams(PubInfo.URL_Service_AddFace);
         params.addHeader("Content-Type", "application/json;charset=UTF-8");
+        params.addHeader("IMEI",PubInfo.IMEI); // 为当前请求添加一个头,设备编号
+//        Location location = AppUtil.getLocation(FaceRApplacation.getContext());
+//        params.addHeader("location","经度："+location.getLongitude()+"纬度："+location.getLatitude()); // 为当前请求添加一个头,设备编号
         params.addBodyParameter("pepleinfo", JsonUtil.faceIngo2Json(facePepleInfo).toString());
+        return params;
+    }
+    public static RequestParams getLicense(){
+        RequestParams params = new RequestParams(PubInfo.URL_Service_License);
+        params.addHeader("Content-Type", "application/json;charset=UTF-8");
+        params.addHeader("IMEI",PubInfo.IMEI); // 为当前请求添加一个头,设备编号
+//        Location location = AppUtil.getLocation(FaceRApplacation.getContext());
+//        params.addHeader("location","经度："+location.getLongitude()+"纬度："+location.getLatitude()); // 为当前请求添加一个头,设备编号
+
+        params.addBodyParameter("SysVersion",AppUtil.getAndroidSysVersion());
+        params.addBodyParameter("PhoneModel",AppUtil.getPhoneModel());
+        params.addBodyParameter("Time", DateUtil.getCurrentDateTimeStr());
+        params.addBodyParameter("Version", AppUtil.getVersionName(FaceRApplacation.getContext()));
+        params.addBodyParameter("Remark", "");
+
         return params;
     }
 }

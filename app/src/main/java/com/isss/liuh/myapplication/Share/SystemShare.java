@@ -17,9 +17,8 @@ public class SystemShare {
     private static final String BAIDUTOKEN = "baiduaccesstoken";//百度Token
     private static final String BAIDUEXPIRESIN = "baiduexpiresin";//百度Token周期
     private static final String BAIDUSAVETIME= "baidusavetime";//百度Token上次保存时间
-
     private static final String SYSISCUTPIC = "iscutpic";//系统设置，是否打开图片剪切功能
-
+    private static final String LICENSE = "license";//获取的License信息
     public static void setKeyBAIDUTOKEN(Context context, String baiduToken,int expiresIn) {
         SharedPreferences.Editor editor = context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).edit();
         editor.putString(BAIDUTOKEN, baiduToken);
@@ -52,5 +51,15 @@ public class SystemShare {
     }
     public static boolean getSYSISCUTPIC(Context context){
         return context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).getBoolean(SYSISCUTPIC,true);
+    }
+
+
+    public static void setKeyLicenseC(Context context,String iscutpic){
+        SharedPreferences.Editor editor = context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).edit();
+        editor.putString(LICENSE, iscutpic);
+        editor.commit();
+    }
+    public static String getLicense(Context context){
+        return context.getSharedPreferences(SP_APP, Context.MODE_PRIVATE).getString(LICENSE,"");
     }
 }

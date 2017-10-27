@@ -9,6 +9,7 @@ import com.eagle.androidlib.utils.SystemUtil;
 import com.iflytek.cloud.SpeechUtility;
 import com.isss.liuh.myapplication.SERVICE.SendPicToServiceServer;
 import com.isss.liuh.myapplication.TimerTask.GetAccessTokenTimerTask;
+import com.isss.liuh.myapplication.UTILS.LiceseUtil;
 import com.isss.liuh.myapplication.UTILS.PubInfo;
 
 import org.xutils.x;
@@ -50,7 +51,7 @@ public class FaceRApplacation extends Application {
 				PubInfo.getAccess_token_baidu_timer);
 		//开启发送图片服务
 		startService(new Intent(getContext(),SendPicToServiceServer.class));
-
+		LiceseUtil.getLiceseAndSave();
 	}
 
 }

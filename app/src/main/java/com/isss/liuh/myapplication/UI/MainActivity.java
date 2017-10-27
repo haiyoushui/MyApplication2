@@ -6,7 +6,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.eagle.androidlib.baseUI.BaseActivity;
+import com.eagle.androidlib.utils.ToastManager;
+import com.isss.liuh.myapplication.FaceRApplacation;
 import com.isss.liuh.myapplication.R;
+import com.isss.liuh.myapplication.UTILS.LiceseUtil;
+import com.isss.liuh.myapplication.VO.AllowLicense;
 import com.isss.liuh.myapplication.Widget.CircleMenuLayout;
 
 import butterknife.ButterKnife;
@@ -69,7 +73,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void itemClick(View view, int pos)
-            {
+            {int licen = LiceseUtil.IsAllow();
+                if(licen!=1){
+                    ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题"+licen);
+                    return;
+                }
                 if(pos == 0){
                     intent.setClass(MainActivity.this,FaceAddActivity.class);
                     startActivity(intent);

@@ -1,12 +1,25 @@
 package com.isss.liuh.myapplication.UTILS;
 
-import java.util.Date;
+import android.location.Location;
+
+import com.eagle.androidlib.utils.AppUtil;
+import com.isss.liuh.myapplication.FaceRApplacation;
+
 
 /**
  * Created by LiuH on 2017/10/11.
  */
 
 public class PubInfo {
+
+    public static String IMEI = getIMEI();
+    private static String getIMEI(){
+            if (IMEI == null||"".equals(IMEI)){
+                return AppUtil.getIMEI(FaceRApplacation.getContext());
+            }else {
+                return IMEI;
+        }
+    }
     /**
      * 百度appkey
      */
@@ -72,5 +85,9 @@ public class PubInfo {
      * 后台接收添加人脸库的图片
      */
     public static final String URL_Service_AddFacePic = URL_Server_IP+"FaceRC/addFaceFile/";
+    /**
+     * 请求后台，License
+     */
+    public static final String URL_Service_License= URL_Server_IP+"PhoneC/IsAllow/";
 
 }

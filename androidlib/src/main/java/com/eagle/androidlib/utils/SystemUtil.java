@@ -44,6 +44,10 @@ public class SystemUtil {
      */
     public static  String FACEIDENTIFYPATH = null;
     /**
+     * 出错的图片
+     */
+    public static  String FACERRORPICPATH = null;
+    /**
      * 初始化图片保存的路径
      */
     public static void initPICDir() {
@@ -53,6 +57,7 @@ public class SystemUtil {
         SystemUtil. ADDFACEPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFace/";
         SystemUtil. FACEIDENTIFYPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceIdentify/";
         SystemUtil. ADDFACESUCCESSPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/AddFaceSuccess/";
+        SystemUtil. FACERRORPICPATH = Environment.getExternalStorageDirectory() + "/Isss/PIC/FaceError/";
         //判断sd卡 创建临时图片存放文件夹
         String status = Environment.getExternalStorageState();
         if (status.equals(Environment.MEDIA_MOUNTED)) {
@@ -62,6 +67,7 @@ public class SystemUtil {
             SystemUtil.makedir(SystemUtil.ADDFACEPATH);
             SystemUtil.makedir(SystemUtil.FACEIDENTIFYPATH);
             SystemUtil.makedir(SystemUtil.ADDFACESUCCESSPATH);
+            SystemUtil.makedir(SystemUtil.FACERRORPICPATH);
         }
     }
 

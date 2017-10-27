@@ -151,6 +151,8 @@ public class SendPicToServiceServer extends Service{
                     JSONObject jsonObject = new JSONObject(result);
                     if(jsonObject.getBoolean("success")){
                         fileSuc.delete();
+                    }else{
+                        SystemUtil.moveFile(fileSuc.getAbsolutePath(),SystemUtil.FACERRORPICPATH);
                     }
 
                 } catch (Exception e) {

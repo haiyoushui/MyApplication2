@@ -160,7 +160,7 @@ public class JsonUtil {
     return jsonObject;
     }
     /**
-     * 将注册的人脸信息封装成JSON
+     * 将注册的人脸信息封装成JSON，发给己方后台
      */
     public static JSONObject faceIngo2Json(FacePepleInfo facePepleInfo){
         JSONObject jsonObject = new JSONObject();
@@ -183,6 +183,24 @@ public class JsonUtil {
         return jsonObject;
     }
     /**
+     * 将注册的人脸信息封装成JSON 当做user_info上传给百度
+     */
+    public static JSONObject faceIngo2JsonBaidu(FacePepleInfo facePepleInfo){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("uname",facePepleInfo.getUname()+"");
+            jsonObject.put("gender",facePepleInfo.getGender()+"");
+            jsonObject.put("birthday",facePepleInfo.getBirthday()+"");
+            jsonObject.put("uinfo",facePepleInfo.getUinfo()+"");
+            jsonObject.put("address",facePepleInfo.getAddress()+"");
+            jsonObject.put("idcardaddress",facePepleInfo.getIDCardAddress()+"");
+            jsonObject.put("time", DateUtil.getCurrentDateStrYYYYMMDDHHMMSS()+"");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+    /**
      * 将人脸识别的返回结果解析
      */
     public static FacePepleInfo faceInfo2FacePeple(String jsonStr){
@@ -198,11 +216,8 @@ public class JsonUtil {
           facePepleInfo.setUinfo(jsonUserInfo.getString("uinfo"));
           facePepleInfo.setAddress(jsonUserInfo.getString("address"));
           facePepleInfo.setIDCardAddress(jsonUserInfo.getString("idcardaddress"));
-          facePepleInfo.setIDCardId(jsonUserInfo.getString("idcardid"));
           facePepleInfo.setBirthday(jsonUserInfo.getString("birthday"));
-          facePepleInfo.setEthnic(jsonUserInfo.getString("ethnic"));
           facePepleInfo.setTime(jsonUserInfo.getString("time"));
-          facePepleInfo.setIMEI(jsonUserInfo.getString("IMEI"));
           facePepleInfo.setGender(jsonUserInfo.getString("gender"));
           facePepleInfo.setFaceliveness(jsonObject.getJSONArray("ext_info").getJSONObject(0).getString("faceliveness"));
       }catch (Exception e){
@@ -218,15 +233,15 @@ public class JsonUtil {
             allowLicense.setIsAllow(jsonObject.getInt("isAllow"));
             allowLicense.setStartTime(jsonObject.getString("startTime"));
             allowLicense.setEndTime(jsonObject.getString("endTime"));
-            allowLicense.setFunction1(jsonObject.getString("function1"));
-            allowLicense.setFunction2(jsonObject.getString("function2"));
-            allowLicense.setFunction3(jsonObject.getString("function3"));
-            allowLicense.setFunction4(jsonObject.getString("function4"));
-            allowLicense.setFunction5(jsonObject.getString("function5"));
-            allowLicense.setFunction6(jsonObject.getString("function6"));
-            allowLicense.setFunction7(jsonObject.getString("function7"));
-            allowLicense.setFunction8(jsonObject.getString("function8"));
-            allowLicense.setFunction9(jsonObject.getString("function9"));
+            allowLicense.setFunction1(jsonObject.getInt("function1"));
+            allowLicense.setFunction2(jsonObject.getInt("function2"));
+            allowLicense.setFunction3(jsonObject.getInt("function3"));
+            allowLicense.setFunction4(jsonObject.getInt("function4"));
+            allowLicense.setFunction5(jsonObject.getInt("function5"));
+            allowLicense.setFunction6(jsonObject.getInt("function6"));
+            allowLicense.setFunction7(jsonObject.getInt("function7"));
+            allowLicense.setFunction8(jsonObject.getInt("function8"));
+            allowLicense.setFunction9(jsonObject.getInt("function9"));
             allowLicense.setRemark(jsonObject.getString("remark"));
             allowLicense.setIMEI(jsonObject.getString("imei"));
 

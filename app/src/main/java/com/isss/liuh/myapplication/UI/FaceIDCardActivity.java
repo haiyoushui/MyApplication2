@@ -296,7 +296,7 @@ public class FaceIDCardActivity extends BaseActivity {
         facePepleInfo.setUname(iccardName.getText().toString());
         facePepleInfo.setUinfo("身份证扫描入录");
         facePepleInfo.setAddress(idcardAddress.getText().toString());
-        String userInfo = JsonUtil.faceIngo2Json(facePepleInfo).toString();
+        String userInfo = JsonUtil.faceIngo2JsonBaidu(facePepleInfo).toString();
         RequestParams params = HeadUtil.addFace(fileSrc, idcardId.getText().toString(), userInfo, isReplace);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

@@ -13,6 +13,8 @@ import com.isss.liuh.myapplication.UTILS.LiceseUtil;
 import com.isss.liuh.myapplication.VO.AllowLicense;
 import com.isss.liuh.myapplication.Widget.CircleMenuLayout;
 
+import java.util.Map;
+
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
@@ -73,24 +75,44 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void itemClick(View view, int pos)
-            {int licen = LiceseUtil.IsAllow();
-                if(licen!=1){
-                    ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题"+licen);
+            {Map<String,Integer> licen = LiceseUtil.IsAllow(MainActivity.this);
+                if(licen.get("main")!=1){
+                    ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题"+licen.get("main"));
                     return;
                 }
                 if(pos == 0){
+                    if(licen.get("func1") != 1){
+                        ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题func1="+licen.get("func1"));
+                        return;
+                    }
                     intent.setClass(MainActivity.this,FaceAddActivity.class);
                     startActivity(intent);
                 }else if(pos == 1){
+                    if(licen.get("func2") != 1){
+                        ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题func2="+licen.get("func2"));
+                        return;
+                    }
                     intent.setClass(MainActivity.this,FaceIdentifyAcitivity.class);
                     startActivity(intent);
                 }else if(pos == 2){
+                    if(licen.get("func3") != 1){
+                        ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题func3="+licen.get("func3"));
+                        return;
+                    }
                     intent.setClass(MainActivity.this,FaceDetectActivity.class);
                     startActivity(intent);
                 }else if(pos == 3){
+                    if(licen.get("func4") != 1){
+                        ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题func4="+licen.get("func4"));
+                        return;
+                    }
                     intent.setClass(MainActivity.this,IDCheakActivity.class);
                     startActivity(intent);
                 }else if(pos == 4){
+                    if(licen.get("func5") != 1){
+                        ToastManager.getInstance(FaceRApplacation.getContext()).show("使用权限有问题func5="+licen.get("func5"));
+                        return;
+                    }
             intent.setClass(MainActivity.this,FaceIDCardActivity.class);
             startActivity(intent);
         }
